@@ -1,0 +1,75 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Car {
+public:
+    string brend;
+    string model;
+    int year;
+
+    void displayInfo() {
+        cout << "Brand: " << brend << endl;
+        cout << "Model: " << model << endl;
+        cout << "Year: " << year << endl;
+    }
+};
+
+class CarBuilder {
+protected:
+    Car car;
+
+public:
+    virtual void buildBrand() = 0;
+    virtual void buildModel() = 0;
+    virtual void buildYear() = 0;
+
+    Car getCar() {
+        return car;
+    }
+};
+
+class SedanCarBuilder : public CarBuilder {
+public:
+    void buildBrand() {
+        car.brend = "Toyota";
+    }
+    void buildModel() {
+        car.model = "Camry";
+    }
+    void  buildYear() {
+        car.year = 2022;
+    }
+
+};
+
+class Director {
+private:
+    CarBuilder *builder;
+
+public:
+    void setBuilder(CarBuilder *b) {
+        builder = b;
+    }
+
+    Car buildCar() {
+        builder->buildBrand();
+        builder->buildModel();
+        builder->buildYear();
+        return builder->getCar();
+    }
+};
+
+int main() {
+    Director director;
+    SedanCarBuilder sedanBuilder;
+
+    director.setBuilder(&sedanBuilder);
+    Car sedanCar = director.buildCar();
+
+    cout << "Sedan Car Information:" << endl;
+    sedanCar.displayInfo();
+
+    return 0;
+}
